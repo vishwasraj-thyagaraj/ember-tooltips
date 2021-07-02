@@ -331,15 +331,15 @@ export default Component.extend({
       });
     }
 
-    this._addEventListener('keydown', (keyEvent) => {
-
-      if (keyEvent.which === 27 && this.get('isShown')) {
-        this.hide();
-        keyEvent.stopImmediatePropagation(); /* So this callback only fires once per keydown */
-        keyEvent.preventDefault();
-        return false;
-      }
-    }, document);
+    // Keydown events which are added to document, is causing lag in places where ever inputs are present
+    // this._addEventListener('keydown', (keyEvent) => {
+    //   if (keyEvent.which === 27 && this.get('isShown')) {
+    //     this.hide();
+    //     keyEvent.stopImmediatePropagation(); /* So this callback only fires once per keydown */
+    //     keyEvent.preventDefault();
+    //     return false;
+    //   }
+    // }, document);
   },
 
   createTooltip() {
