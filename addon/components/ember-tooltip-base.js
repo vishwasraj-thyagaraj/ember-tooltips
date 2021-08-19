@@ -234,6 +234,12 @@ export default Component.extend({
   didUpdateAttrs() {
     this._super(...arguments);
 
+    // In case of certain dynamic property changes, parent component can force update the tooltip
+    if (this.get('forceUpdate')) {
+      this.get('_tooltip').dispose();
+      this.createTooltip();
+    }
+
     if (this.get('isShown')) {
       this.show();
 
