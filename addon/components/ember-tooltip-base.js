@@ -88,6 +88,7 @@ export default Component.extend({
   popperOptions: null,
   popperContainer: false,
   animationDuration: 200,
+  triggerEvent: null,
 
   /* Actions */
 
@@ -306,13 +307,15 @@ export default Component.extend({
       /* Else, add the show and hide events individually */
 
       if (showOn !== 'none') {
-        this._addEventListener(showOn, () => {
+        this._addEventListener(showOn, (e) => {
+          this.triggerEvent = e;
           this.show();
         });
       }
 
       if (hideOn !== 'none') {
         this._addEventListener(hideOn, () => {
+          this.triggerEvent = null;
           this.hide();
         });
       }
