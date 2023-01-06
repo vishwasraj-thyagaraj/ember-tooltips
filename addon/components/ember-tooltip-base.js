@@ -88,6 +88,7 @@ export default Component.extend({
   popperOptions: null,
   popperContainer: false,
   animationDuration: 200,
+  triggerEvent: null,
 
   /* Actions */
 
@@ -234,6 +235,12 @@ export default Component.extend({
   didUpdateAttrs() {
     this._super(...arguments);
 
+    // In case of certain dynamic property changes, parent component can force update the tooltip
+    if (this.get('forceUpdate')) {
+      this.get('_tooltip').dispose();
+      this.createTooltip();
+    }
+
     if (this.get('isShown')) {
       this.show();
 
@@ -300,13 +307,15 @@ export default Component.extend({
       /* Else, add the show and hide events individually */
 
       if (showOn !== 'none') {
-        this._addEventListener(showOn, () => {
+        this._addEventListener(showOn, (e) => {
+          this.triggerEvent = e;
           this.show();
         });
       }
 
       if (hideOn !== 'none') {
         this._addEventListener(hideOn, () => {
+          this.triggerEvent = null;
           this.hide();
         });
       }
@@ -331,15 +340,15 @@ export default Component.extend({
       });
     }
 
-    this._addEventListener('keydown', (keyEvent) => {
-
-      if (keyEvent.which === 27 && this.get('isShown')) {
-        this.hide();
-        keyEvent.stopImmediatePropagation(); /* So this callback only fires once per keydown */
-        keyEvent.preventDefault();
-        return false;
-      }
-    }, document);
+    // Keydown events which are added to document, is causing lag in places where ever inputs are present
+    // this._addEventListener('keydown', (keyEvent) => {
+    //   if (keyEvent.which === 27 && this.get('isShown')) {
+    //     this.hide();
+    //     keyEvent.stopImmediatePropagation(); /* So this callback only fires once per keydown */
+    //     keyEvent.preventDefault();
+    //     return false;
+    //   }
+    // }, document);
   },
 
   createTooltip() {
