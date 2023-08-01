@@ -28,7 +28,7 @@ export default EmberTooltipBase.extend({
 
     this._addEventListener('click', (event) => {
       const { target: eventTarget } = event;
-      const clickIsOnPopover = eventTarget == _tooltip.popperInstance.popper;
+      const clickIsOnPopover = eventTarget == _tooltip.popperInstance.popper || _tooltip.popperInstance.popper.contains(eventTarget);
       const clickIsOnTarget = eventTarget == target;
       const hasHideOnEvent = this.get('hideOn') && this.get('hideOn') !== 'none';
       const hideOnOutsideClick = hasHideOnEvent &&
